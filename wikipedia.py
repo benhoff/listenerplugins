@@ -3,10 +3,26 @@ Scaevolus 2009"""
 
 import re
 import requests
+from yapsy.IPlugin import IPlugin
 from lxml import etree
 
-from cloudbot import hook
-from cloudbot.util import formatting
+#from listener import Listener
+
+class WikipediaListener(IPlugin):
+    def __init__(self):
+        super(WikipediaListener, self).__init__()
+        self.bot = None
+        str_matches = ["wiki", "wikipedia", "w"]
+        self._matches = [re.compile(s) for s in str_matches]
+
+    # FIXME: this API is not permenant
+    def set_bot(self, bot):
+        self.bot = bot
+
+    
+    def call(self, regex_command, string_argument):
+        if regex_command in self._matches:
+            return wiki(string_argument)
 
 # security
 parser = etree.XMLParser(resolve_entities=False, no_network=True)
@@ -18,7 +34,6 @@ random_url = api_prefix + "?action=query&format=xml&list=random&rnlimit=1&rnname
 paren_re = re.compile('\s*\(.*\)$')
 
 
-@hook.command("wiki", "wikipedia", "w")
 def wiki(text):
     """wiki <phrase> -- Gets first sentence of Wikipedia article on <phrase>."""
 
@@ -53,6 +68,5 @@ def wiki(text):
         desc = title + desc
 
     desc = ' '.join(desc.split())  # remove excess spaces
-    desc = formatting.truncate(desc, 200)
 
     return '{} :: {}'.format(desc, requests.utils.quote(url, ':/'))
