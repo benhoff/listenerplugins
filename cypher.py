@@ -32,7 +32,7 @@ class CypherListener(IPlugin):
 
     
     def call(self, regex_command, string_argument, done=None):
-        if regex_command in self._cypher_matches or in self._decypher_matches:
+        if regex_command in self._cypher_matches or regex_command in self._decypher_matches:
             if regex_command in self._cypher_matches:
                 result = cypher(string_argument)
             elif regex_command in self._decypher_matches:
