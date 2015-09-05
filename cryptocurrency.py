@@ -12,6 +12,7 @@ Special Thanks:
 License:
     GPL v3
 """
+import types
 from urllib.parse import quote_plus
 from datetime import datetime
 import re
@@ -42,18 +43,23 @@ class CryptocurrencyListener(IPlugin):
     def set_bot(self, bot):
         self.bot = bot
 
-    def call(self, regex_command, string_argument):
+    def call(self, regex_command, string_argument, done=None):
         print(regex_command)
         if regex_command in self._matches:
-            print('made it here')
             if regex_command in self._bitcoin_matches:
-                return crypto_command('btc')
+                result = crypto_command('btc')
             elif regex_command in self._doge_matches:
-                return crypto_command("doge")
+                result = crypto_command("doge")
             elif regex_command in self._litecoin_matches:
-                return crypto_command("ltc")
+                result = crypto_command("ltc")
             else:
-                return crypto_command(string_argument)
+                result = crypto_command(string_argument)
+
+            if isinstace(done, types.FunctionType):
+                done()
+            done = True
+            return result, done
+
 
 # main command
 def crypto_command(text):

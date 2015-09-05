@@ -1,12 +1,10 @@
 """Searches wikipedia and returns first sentence of article
 Scaevolus 2009"""
-
+import types
 import re
 import requests
 from yapsy.IPlugin import IPlugin
 from lxml import etree
-
-#from listener import Listener
 
 class WikipediaListener(IPlugin):
     def __init__(self):
@@ -20,9 +18,13 @@ class WikipediaListener(IPlugin):
         self.bot = bot
 
     
-    def call(self, regex_command, string_argument):
+    def call(self, regex_command, string_argument, done=None):
         if regex_command in self._matches:
-            return wiki(string_argument)
+            result = wiki(string_argument)
+            if isinstance(done, types.FunctionType):
+                done()
+            done = True
+            return result, done
 
 # security
 parser = etree.XMLParser(resolve_entities=False, no_network=True)

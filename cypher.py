@@ -14,7 +14,7 @@ Modified By:
 License:
     GPL v3
 """
-
+import types
 import base64
 import binascii
 import re
@@ -31,11 +31,17 @@ class CypherListener(IPlugin):
         self.bot = bot
 
     
-    def call(self, regex_command, string_argument):
-        if regex_command in self._cypher_matches:
-            return cypher(string_argument)
-        elif regex_command in self._decypher_matches:
-            return decypher(string_argument)
+    def call(self, regex_command, string_argument, done=None):
+        if regex_command in self._cypher_matches or in self._decypher_matches:
+            if regex_command in self._cypher_matches:
+                result = cypher(string_argument)
+            elif regex_command in self._decypher_matches:
+                result = decypher(string_argument)
+            if isinstance(done, types.FunctionType):
+                done()
+            done = True
+
+            return result, done
 
 def encode(password, text):
     """

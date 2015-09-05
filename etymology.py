@@ -1,5 +1,5 @@
 # Plugin by GhettoWizard and Scaevolus
-
+import types
 import re
 from lxml import html
 
@@ -15,9 +15,13 @@ class EtymologyListener(IPlugin):
     def set_bot(self, bot):
         self.bot = bot
 
-    def call(self, regex_command, string_argument):
+    def call(self, regex_command, string_argument, done=None):
         if regex_command in self._matches:
-            return etymology(string_argument)
+            result = etymology(string_argument)
+            if isinstance(done, types.FunctionType):
+                done()
+            done = True
+            return result, done
 
 def etymology(text):
     """<word> - retrieves the etymology of <word>

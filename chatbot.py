@@ -9,7 +9,7 @@ Created By:
 License:
     GNU General Public License (Version 3)
 """
-
+import types
 import urllib.parse
 import hashlib
 import collections
@@ -40,9 +40,13 @@ class ChatBotListener(IPlugin):
         self.bot = bot
 
     
-    def call(self, regex_command, string_argument):
+    def call(self, regex_command, string_argument, done=None):
         if regex_command in self._matches:
-            return ask(string_argument)
+            result = ask(string_argument)
+            if isinstance(done, types.FunctionType):
+                done()
+            done = True
+            return result, done
 
 
 API_URL = "http://www.cleverbot.com/webservicemin/"
