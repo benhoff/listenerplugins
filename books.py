@@ -10,12 +10,15 @@ class BookListener(IPlugin):
     def __init__(self):
         super(BookListener, self).__init__()
         self._matches = [re.compile('books'), re.compile('gbooks')]
+        self.dev_key = None
 
     # FIXME: this API is not permenant
     def set_bot(self, bot):
         self.bot = bot
         try:
             self.dev_key = self.bot.config.get("api_keys", {}).get("google_dev_key", None)
+        except Exception as e:
+            print(e)
 
     def call(self, regex_command, string_argument, done=None):
         if regex_command in self._matches:
