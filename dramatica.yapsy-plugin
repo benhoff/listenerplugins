@@ -1,0 +1,6 @@
+[Core]
+Name = Drama
+Module = drama
+
+[Documentation]
+Description = This is a helper for searching Encyclopediadramatica
