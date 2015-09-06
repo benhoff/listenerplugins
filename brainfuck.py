@@ -2,17 +2,31 @@
 http://brainfuck.sourceforge.net/brain.py"""
 
 import re
+import types
 import asyncio
 import random
-
-from cloudbot import hook
+from yapsy.IPlugin import IPlugin
 
 BUFFER_SIZE = 5000
 MAX_STEPS = 1000000
 
+class BrainfuckListener(IPlugin):
+    def __init__(self):
+        super(BrainfuckListener, self).__init__()
+        self._matches = [re.compile('brainfuck'), re.compile('bf')]
 
-@asyncio.coroutine
-@hook.command("brainfuck", "bf")
+    # FIXME: this API is not permenant
+    def set_bot(self, bot):
+        self.bot = bot
+
+    def call(self, regex_command, string_argument, done=None):
+        if regex_command in self._matches:
+            result = bf(string_argument)
+            if isinstance(done, types.FunctionType):
+                done()
+            done = True
+            return result, done
+
 def bf(text):
     """<prog> - executes <prog> as Brainfuck code
     :type text: str
