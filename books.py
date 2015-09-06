@@ -1,20 +1,31 @@
+import re 
+import types
 import requests
-
-from cloudbot import hook
-from cloudbot.util import formatting, web
+from yapsy.IPlugin import IPlugin
 
 base_url = 'https://www.googleapis.com/books/v1/'
 book_search_api = base_url + 'volumes?'
 
+class BookListener(IPlugin):
+    def __init__(self):
+        super(BookListener, self).__init__()
+        self._matches = [re.compile('books'), re.compile('gbooks')]
 
-@hook.on_start()
-def load_key(bot):
-    global dev_key
-    dev_key = bot.config.get("api_keys", {}).get("google_dev_key", None)
+    # FIXME: this API is not permenant
+    def set_bot(self, bot):
+        self.bot = bot
+        try:
+            self.dev_key = self.bot.config.get("api_keys", {}).get("google_dev_key", None)
 
+    def call(self, regex_command, string_argument, done=None):
+        if regex_command in self._matches:
+            result = books(string_argument, self.dev_key)
+            if isinstance(done, types.FunctionType):
+                done()
+            done = True
+            return result, done
 
-@hook.command("books", "gbooks")
-def books(text):
+def books(text, dev_key=None):
     """books <query> -- Searches Google Books for <query>."""
     if not dev_key:
         return "This command requires a Google Developers Console API key."
@@ -42,7 +53,7 @@ def books(text):
             author = "Unknown Author"
 
     try:
-        description = formatting.truncate_str(book['description'], 130)
+        description = book['description']
     except KeyError:
         description = "No description available."
 
@@ -57,6 +68,7 @@ def books(text):
     except KeyError:
         pages = ''
 
-    link = web.shorten(book['infoLink'], service="goo.gl", key=dev_key)
+    link = book['infoLink']
+    #link = web.shorten(book['infoLink'], service="goo.gl", key=dev_key)
 
     return "\x02{}\x02 by \x02{}\x02 ({}){} - {} - {}".format(title, author, year, pages, description, link)
