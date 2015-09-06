@@ -1,17 +1,31 @@
 import feedparser
+import re
+import types
+from yapsy.IPlugin import IPlugin
+class FeedListener(IPlugin):
+    def __init__(self):
+        super(FeedListener, self).__init__()
+        self._matches = [re.compile('feed'), re.compile('rss'), re.compile('news')]
 
-from cloudbot import hook
-from cloudbot.util import web, formatting
+    # FIXME: this API is not permenant
+    def set_bot(self, bot):
+        self.bot = bot
 
+    def call(self, regex_command, string_argument, done=None):
+        if regex_command in self._matches:
+            result = rss(string_argument)
+            if isinstance(done, types.FunctionType):
+                done()
+            done = True
+            return result, done
 
 def format_item(item):
-    url = web.try_shorten(item.link)
-    title = formatting.strip_html(item.title)
+    url = item.link
+    title = item.title
     return "{} ({})".format(
         title, url)
 
 
-@hook.command("feed", "rss", "news")
 def rss(text):
     """<feed> -- Gets the first three items from the RSS/ATOM feed <feed>."""
     limit = 3

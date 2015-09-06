@@ -1,0 +1,6 @@
+[Core]
+Name = Feeds
+Module = feeds 
+
+[Documentation]
+Description = This is a helper for display rss/atom feeds
