@@ -2,9 +2,7 @@ import requests
 import re
 from bs4 import BeautifulSoup
 
-from cloudbot import hook
-from cloudbot.util import web, formatting, colors
-
+from yapsy.IPlugin import IPlugin
 
 SEARCH_URL = "http://www.amazon.{}/s/"
 REGION = "com"
@@ -14,17 +12,32 @@ AMAZON_RE = re.compile(""".*ama?zo?n\.(com|co\.uk|com\.au|de|fr|ca|cn|es|it)/.*/
 
 # Feel free to set this to None or change it to your own ID.
 # Or leave it in to support CloudBot, it's up to you!
-AFFILIATE_TAG = "cloudbot-20"
+AFFILIATE_TAG = None
 
+class AmazonListener(IPlugin):
+    def __init__(self):
+        super(AmazonListener, self).__init__()
+        self._matches = [re.compile('az'), re.compile('amazon')]
 
-@hook.regex(AMAZON_RE)
+    # FIXME: this API is not permenant
+    def set_bot(self, bot):
+        self.bot = bot
+
+    def call(self, regex_command, string_argument, done=None):
+        if regex_command in self._matches:
+            result = amazon(string_argument)
+            if isinstance(done, types.FunctionType):
+                done()
+            done = True
+            return result, done
+
+#TODO: Implement
 def amazon_url(match):
     cc = match.group(1)
     asin = match.group(2)
     return amazon(asin, _parsed=cc)
 
 
-@hook.command("amazon", "az")
 def amazon(text, _parsed=False):
     """<query> -- Searches Amazon for query"""
     headers = {
@@ -58,7 +71,7 @@ def amazon(text, _parsed=False):
     asin = item['data-asin']
 
     # here we use dirty html scraping to get everything we need
-    title = formatting.truncate(item.find('h2', {'class': 's-access-title'}).text, 60)
+    title = item.find('h2', {'class': 's-access-title'}).text
     tags = []
 
     # tags!
@@ -94,13 +107,12 @@ def amazon(text, _parsed=False):
         url = "http://www.amazon.com/dp/" + asin + "/?tag=" + AFFILIATE_TAG
     else:
         url = "http://www.amazon.com/dp/" + asin + "/"
-    url = web.try_shorten(url)
 
     # join all the tags into a string
     tag_str = " - " + ", ".join(tags) if tags else ""
 
     # finally, assemble everything into the final string, and return it!
     if not _parsed:
-        return colors.parse("$(b){}$(b) ({}) - {}{} - {}".format(title, price, rating_str, tag_str, url))
+        return "$(b){}$(b) ({}) - {}{} - {}".format(title, price, rating_str, tag_str, url)
     else:
-        return colors.parse("$(b){}$(b) ({}) - {}{}".format(title, price, rating_str, tag_str))
+        return "$(b){}$(b) ({}) - {}{}".format(title, price, rating_str, tag_str)
