@@ -7,10 +7,13 @@ def return_error(instance, message, done, *args, **kwargs):
         done()
     done = True
     # FIXME
-    result = 'You are not authorized to {}'.format(message.command.to_string())
+    result = 'You are not authorized to {}'.format(message.command)
     return result, done
 
 class ActivityAuth(object):
+    USER_ROLE_MAPPING = None
+    ACTIVITY_ROLE_MAPPING = None
+
     def __init__(self, activity):
         self.activity = re.compile(activity)
 
@@ -25,8 +28,8 @@ class ActivityAuth(object):
 
     @classmethod
     def get_user_activities(kls, user):
-        # Required a mapping of roles to activities
-        return [None, False]
+        role = kls.USER_ROLE_MAPPING[user] 
+        return kls.ACTIVITY_ROLE[role]
 
 class Base(IPlugin):
     def __init__(self, function=None, config_source=None):
