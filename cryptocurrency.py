@@ -18,13 +18,13 @@ from datetime import datetime
 import re
 
 import requests
-from yapsy.IPlugin import IPlugin
+from . import ListenerPlugin
 
 API_URL = "https://coinmarketcap-nexuist.rhcloud.com/api/{}"
 
-class CryptocurrencyListener(IPlugin):
+class Cryptocurrency(ListenerPlugin):
     def __init__(self):
-        super(CryptocurrencyListener, self).__init__()
+        super(Cryptocurrency, self).__init__()
         str_matches = ['bitcoin', 'btc', 'litecoin', 'ltc', 
                 'dogecoin', 'doge', 'crypto', 'cryptocurrency']
 

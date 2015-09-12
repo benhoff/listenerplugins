@@ -1,10 +1,11 @@
 import feedparser
 import re
 import types
-from yapsy.IPlugin import IPlugin
-class FeedListener(IPlugin):
+from . import ListenerPlugin
+
+class Feeds(ListenerPlugin):
     def __init__(self):
-        super(FeedListener, self).__init__()
+        super(Feeds, self).__init__()
         self._matches = [re.compile('feed'), re.compile('rss'), re.compile('news')]
 
     # FIXME: this API is not permenant

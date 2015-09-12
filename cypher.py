@@ -18,11 +18,11 @@ import types
 import base64
 import binascii
 import re
-from yapsy.IPlugin import IPlugin
+from . import ListenerPlugin
 
-class CypherListener(IPlugin):
+class Cypher(ListenerPlugin):
     def __init__(self):
-        super(CypherListener, self).__init__()
+        super(Cypher, self).__init__()
         self._cypher_matches = [re.compile('cypher'), re.compile('cipher')]
         self._decypher_matches = [re.compile('decypher'), re.compile('decipher')]
 

@@ -13,13 +13,13 @@ import re
 import types
 import requests
 from urllib.parse import urlparse
-from yapsy.IPlugin import IPlugin
+from . import ListenerPlugin
 
 API_SB = "https://sb-ssl.google.com/safebrowsing/api/lookup"
 
-class IsSafeListener(IPlugin):
+class IsSafe(ListenerPlugin):
     def __init__(self):
-        super(IsSafeListener, self).__init__()
+        super(IsSafe, self).__init__()
         self._matches = ['issafe',]
         self.dev_key = None
 

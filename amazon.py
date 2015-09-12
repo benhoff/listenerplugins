@@ -3,7 +3,7 @@ import types
 import requests
 from bs4 import BeautifulSoup
 
-from yapsy.IPlugin import IPlugin
+from . import ListenerPlugin
 
 SEARCH_URL = "http://www.amazon.{}/s/"
 REGION = "com"
@@ -15,9 +15,9 @@ AMAZON_RE = re.compile(""".*ama?zo?n\.(com|co\.uk|com\.au|de|fr|ca|cn|es|it)/.*/
 # Or leave it in to support CloudBot, it's up to you!
 AFFILIATE_TAG = None
 
-class AmazonListener(IPlugin):
+class Amazon(ListenerPlugin):
     def __init__(self):
-        super(AmazonListener, self).__init__()
+        super(Amazon, self).__init__()
         self._matches = [re.compile('az'), re.compile('amazon')]
 
     # FIXME: this API is not permenant

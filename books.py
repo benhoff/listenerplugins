@@ -1,14 +1,14 @@
 import re 
 import types
 import requests
-from yapsy.IPlugin import IPlugin
+from . import ListenerPlugin
 
 base_url = 'https://www.googleapis.com/books/v1/'
 book_search_api = base_url + 'volumes?'
 
-class BookListener(IPlugin):
+class Books(ListenerPlugin):
     def __init__(self):
-        super(BookListener, self).__init__()
+        super(Books, self).__init__()
         self._matches = [re.compile('books'), re.compile('gbooks')]
         self.dev_key = None
 
