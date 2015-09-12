@@ -12,40 +12,56 @@ Special Thanks:
 License:
     GPL v3
 """
+import types
 from urllib.parse import quote_plus
 from datetime import datetime
+import re
 
 import requests
-
-from cloudbot import hook
+from yapsy.IPlugin import IPlugin
 
 API_URL = "https://coinmarketcap-nexuist.rhcloud.com/api/{}"
 
+class CryptocurrencyListener(IPlugin):
+    def __init__(self):
+        super(CryptocurrencyListener, self).__init__()
+        str_matches = ['bitcoin', 'btc', 'litecoin', 'ltc', 
+                'dogecoin', 'doge', 'crypto', 'cryptocurrency']
 
-# aliases
-@hook.command("bitcoin", "btc", autohelp=False)
-def bitcoin():
-    """ -- Returns current bitcoin value """
-    # alias
-    return crypto_command("btc")
+        self._matchs = [re.compile(s) for s in str_matches]
+        self._bitcoin_matches = [re.compile('bitcoin'), re.compile('btc')]
+        self._litecoin_matches = [re.compile('litecoin'), re.compile('ltc')]
+        self._doge_matches = [re.compile('dogecoin'), re.compile('doge')]
 
+        self._matches = [re.compile('crypto'), re.compile('cryptocurrency')]
 
-@hook.command("litecoin", "ltc", autohelp=False)
-def litecoin():
-    """ -- Returns current litecoin value """
-    # alias
-    return crypto_command("ltc")
+        self._matches.extend(self._bitcoin_matches)
+        self._matches.extend(self._litecoin_matches)
+        self._matches.extend(self._doge_matches)
 
+    # FIXME: this API is not permenant
+    def set_bot(self, bot):
+        self.bot = bot
 
-@hook.command("dogecoin", "doge", autohelp=False)
-def dogecoin():
-    """ -- Returns current dogecoin value """
-    # alias
-    return crypto_command("doge")
+    def call(self, regex_command, string_argument, done=None):
+        print(regex_command)
+        if regex_command in self._matches:
+            if regex_command in self._bitcoin_matches:
+                result = crypto_command('btc')
+            elif regex_command in self._doge_matches:
+                result = crypto_command("doge")
+            elif regex_command in self._litecoin_matches:
+                result = crypto_command("ltc")
+            else:
+                result = crypto_command(string_argument)
+
+            if isinstace(done, types.FunctionType):
+                done()
+            done = True
+            return result, done
 
 
 # main command
-@hook.command("crypto", "cryptocurrency")
 def crypto_command(text):
     """ <ticker> -- Returns current value of a cryptocurrency """
     try:

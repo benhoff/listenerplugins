@@ -9,23 +9,37 @@ Created By:
 License:
     GNU General Public License (Version 3)
 """
-
-from cloudbot import hook
-import cloudbot
+import re
+import types
 import requests
 from urllib.parse import urlparse
+from yapsy.IPlugin import IPlugin
 
 API_SB = "https://sb-ssl.google.com/safebrowsing/api/lookup"
 
+class IsSafeListener(IPlugin):
+    def __init__(self):
+        super(IsSafeListener, self).__init__()
+        self._matches = ['issafe',]
+        self.dev_key = None
 
-@hook.on_start()
-def load_api(bot):
-    global dev_key
+    # FIXME: this API is not permenant
+    def set_bot(self, bot):
+        self.bot = bot
+        try:
+            self.dev_key = self.bot.config.get("api_keys", {}).get("google_dev_key", None)
+        except Exception as e:
+            print(e)
 
-    dev_key = bot.config.get("api_keys", {}).get("google_dev_key", None)
+    def call(self, regex_command, string_argument, done=None):
+        if regex_command in self._matches:
+            result = issafe(string_argument, self.dev_key)
+            if isinstance(done, types.FunctionType):
+                done()
+            done = True
+            return result, done
 
-@hook.command()
-def issafe(text):
+def issafe(text, dev_key=None):
     """<website> -- Checks the website against Google's Safe Browsing List."""
     if urlparse(text).scheme not in ['https', 'http']:
         return "Check your URL (it should be a complete URI)."

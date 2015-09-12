@@ -14,12 +14,34 @@ Modified By:
 License:
     GPL v3
 """
-
+import types
 import base64
 import binascii
+import re
+from yapsy.IPlugin import IPlugin
 
-from cloudbot import hook
+class CypherListener(IPlugin):
+    def __init__(self):
+        super(CypherListener, self).__init__()
+        self._cypher_matches = [re.compile('cypher'), re.compile('cipher')]
+        self._decypher_matches = [re.compile('decypher'), re.compile('decipher')]
 
+    # FIXME: this API is not permenant
+    def set_bot(self, bot):
+        self.bot = bot
+
+    
+    def call(self, regex_command, string_argument, done=None):
+        if regex_command in self._cypher_matches or regex_command in self._decypher_matches:
+            if regex_command in self._cypher_matches:
+                result = cypher(string_argument)
+            elif regex_command in self._decypher_matches:
+                result = decypher(string_argument)
+            if isinstance(done, types.FunctionType):
+                done()
+            done = True
+
+            return result, done
 
 def encode(password, text):
     """
@@ -34,7 +56,7 @@ def encode(password, text):
     return base64.urlsafe_b64encode("".join(enc).encode()).decode()
 
 
-def decode(password, encoded, notice):
+def decode(password, encoded):
     """
     :type password: str
     :type encoded: str
@@ -43,8 +65,7 @@ def decode(password, encoded, notice):
     try:
         encoded_bytes = base64.urlsafe_b64decode(encoded.encode()).decode()
     except binascii.Error:
-        notice("Invalid input '{}'".format(encoded))
-        return
+        return "Invalid input '{}'".format(encoded)
     for i in range(len(encoded_bytes)):
         key_c = password[i % len(password)]
         dec_c = chr((256 + ord(encoded_bytes[i]) - ord(key_c)) % 256)
@@ -52,25 +73,21 @@ def decode(password, encoded, notice):
     return "".join(dec)
 
 
-@hook.command("cypher", "cipher")
-def cypher(text, notice):
+def cypher(text):
     """<pass> <string> -- cyphers <string> with <password>"""
     split = text.split(None, 1)
     if len(split) < 2:
-        notice(cypher.__doc__)
-        return
+        return cypher.__doc__
     password = split[0]
     plaintext = split[1]
     return encode(password, plaintext)
 
 
-@hook.command("decypher", "decipher")
-def decypher(text, notice):
+def decypher(text):
     """<pass> <string> - decyphers <string> with <password>"""
     split = text.split(None, 1)
     if len(split) < 2:
-        notice(decypher.__doc__)
-        return
+        return decypher.__doc__
     password = split[0]
     encoded = split[1]
-    return decode(password, encoded, notice)
+    return decode(password, encoded)

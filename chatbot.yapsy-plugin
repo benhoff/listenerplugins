@@ -1,0 +1,6 @@
+[Core]
+Name = ChatBot
+Module = chatbot 
+
+[Documentation]
+Description = A simple plugin for chat bot

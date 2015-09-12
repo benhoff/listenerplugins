@@ -1,13 +1,28 @@
 # Plugin by GhettoWizard and Scaevolus
-
+import types
 import re
 from lxml import html
 
 import requests
+from yapsy.IPlugin import IPlugin
 
-from cloudbot import hook
+class EtymologyListener(IPlugin):
+    def __init__(self):
+        super(EtymologyListener, self).__init__()
+        self._matches = [re.compile('e'), re.compile('etymology')]
 
-@hook.command("e", "etymology")
+    # FIXME: this API is not permenant
+    def set_bot(self, bot):
+        self.bot = bot
+
+    def call(self, regex_command, string_argument, done=None):
+        if regex_command in self._matches:
+            result = etymology(string_argument)
+            if isinstance(done, types.FunctionType):
+                done()
+            done = True
+            return result, done
+
 def etymology(text):
     """<word> - retrieves the etymology of <word>
     :type text: str

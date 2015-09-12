@@ -1,0 +1,6 @@
+[Core]
+Name = Cypher
+Module = cypher 
+
+[Documentation]
+Description = This module does cyphering

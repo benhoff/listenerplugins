@@ -9,18 +9,46 @@ Created By:
 License:
     GNU General Public License (Version 3)
 """
-
+import types
 import urllib.parse
 import hashlib
 import collections
 import html
-
+import re
+from yapsy.IPlugin import IPlugin
 import requests
 
-from cloudbot import hook
-
-
 SESSION = collections.OrderedDict()
+
+class ChatBotListener(IPlugin):
+    def __init__(self):
+        super(ChatBotListener, self).__init__()
+        self.bot = None
+        str_matches = ["ask", "cleverbot", "cb"]
+        self._matches = [re.compile(s) for s in str_matches]
+        SESSION['stimulus'] = ""
+        SESSION['sessionid'] = ""
+        SESSION['start'] = 'y'
+        SESSION['icognoid'] = 'wsf'
+        SESSION['fno'] = '0'
+        SESSION['sub'] = 'Say'
+        SESSION['islearning'] = '1'
+        SESSION['cleanslate'] = 'false'
+
+    # FIXME: this API is not permenant
+    def set_bot(self, bot):
+        self.bot = bot
+
+    
+    def call(self, regex_command, string_argument, done=None):
+        if regex_command in self._matches:
+            result = ask(string_argument)
+            if isinstance(done, types.FunctionType):
+                done()
+            done = True
+            return result, done
+
+
 API_URL = "http://www.cleverbot.com/webservicemin/"
 
 HEADERS = {
@@ -37,18 +65,6 @@ HEADERS = {
 sess = requests.Session()
 sess.get("http://www.cleverbot.com")
 
-@hook.on_start()
-def init_vars():
-    SESSION['stimulus'] = ""
-    SESSION['sessionid'] = ""
-    SESSION['start'] = 'y'
-    SESSION['icognoid'] = 'wsf'
-    SESSION['fno'] = '0'
-    SESSION['sub'] = 'Say'
-    SESSION['islearning'] = '1'
-    SESSION['cleanslate'] = 'false'
-
-
 def cb_think(text):
     SESSION['stimulus'] = text
     payload = urllib.parse.urlencode(SESSION)
@@ -64,7 +80,6 @@ def cb_think(text):
 	    return "Error: API returned "+str(parsed.status_code)
 
 
-@hook.command("ask", "cleverbot", "cb")
 def ask(text):
     """ <question> -- Asks Cleverbot <question> """
     return cb_think(text)

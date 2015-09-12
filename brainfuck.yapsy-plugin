@@ -1,0 +1,6 @@
+[Core]
+Name = Books
+Module = books 
+
+[Documentation]
+Description = This is a helper for searching for books with Google

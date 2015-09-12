@@ -1,15 +1,30 @@
 import re
+import types
 from urllib import parse
 from lxml import html
 
 import requests
-
-from cloudbot import hook
-from cloudbot.util import formatting
+from yapsy.IPlugin import IPlugin
 
 api_url = "http://encyclopediadramatica.se/api.php"
 ed_url = "http://encyclopediadramatica.se/"
 
+class DramaListener(IPlugin):
+    def __init__(self):
+        super(DramaListener, self).__init__()
+        self._matches = [re.compile('drama'),]
+
+    # FIXME: this API is not permenant
+    def set_bot(self, bot):
+        self.bot = bot
+
+    def call(self, regex_command, string_argument, done=None):
+        if regex_command in self._matches:
+            result = drama(string_argument)
+            if isinstance(done, types.FunctionType):
+                done()
+            done = True
+            return result, done
 
 @hook.command()
 def drama(text):
@@ -39,7 +54,7 @@ def drama(text):
         if p.text_content():
             summary = " ".join(p.text_content().splitlines())
             summary = re.sub("\[\d+\]", "", summary)
-            summary = formatting.truncate(summary, 220)
+            #summary = summary
             return "{} - {}".format(summary, url)
 
     return "Unknown Error."
