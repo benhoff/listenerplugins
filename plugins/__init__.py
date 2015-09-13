@@ -16,14 +16,14 @@ class ListenerPlugin(yapsy.IPlugin):
             done = True
             return result, done
 
-from amazon import Amazon
-from books import Books
-from brainfuck import Brainfuck
-from chatbot import ChatBot
-from cryptocurrency import Cryptocurrency
-from cypher import Cypher
-from dramatica import Drama
-from etymology import Etymology
-from feeds import Feeds
-from issafe import IsSafe
-from wikipedia import Wikipedia
+from .amazon import Amazon
+from .books import Books
+from .brainfuck import Brainfuck
+from .chatbot import ChatBot
+from .cryptocurrency import Cryptocurrency
+from .cypher import Cypher
+from .dramatica import Drama
+from .etymology import Etymology
+from .feeds import Feeds
+from .issafe import IsSafe
+from .wikipedia import Wikipedia
