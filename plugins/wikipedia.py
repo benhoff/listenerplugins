@@ -3,12 +3,12 @@ Scaevolus 2009"""
 import types
 import re
 import requests
-from yapsy.IPlugin import IPlugin
 from lxml import etree
+from . import ListenerPlugin
 
-class WikipediaListener(IPlugin):
+class Wikipedia(ListenerPlugin):
     def __init__(self):
-        super(WikipediaListener, self).__init__()
+        super(Wikipedia, self).__init__()
         self.bot = None
         str_matches = ["wiki", "wikipedia", "w"]
         self._matches = [re.compile(s) for s in str_matches]
