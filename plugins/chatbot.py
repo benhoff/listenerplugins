@@ -15,14 +15,15 @@ import hashlib
 import collections
 import html
 import re
-from yapsy.IPlugin import IPlugin
 import requests
+
+from . import ListenerPlugin
 
 SESSION = collections.OrderedDict()
 
-class ChatBotListener(IPlugin):
+class ChatBot(ListenerPlugin):
     def __init__(self):
-        super(ChatBotListener, self).__init__()
+        super(ChatBot, self).__init__()
         self.bot = None
         str_matches = ["ask", "cleverbot", "cb"]
         self._matches = [re.compile(s) for s in str_matches]
