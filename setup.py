@@ -10,7 +10,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 try:
 	setup(
 		name = "plugins",
-		version = 0.0.1,
+		version = '0.0.1',
 		packages = ['plugins'],
 		package_dir = {'plugins':'plugins'},
 		
