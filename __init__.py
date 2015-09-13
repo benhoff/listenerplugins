@@ -1,13 +1,12 @@
-from .yapsy import IPlugin
+import yapsy
 
-class ListenerPlugin(IPlugin):
+class ListenerPlugin(yapsy.IPlugin):
     def __init__(self, function=None, config_source=None):
-        super(Base, self).__init__()
+        super(ListenerPlugin, self).__init__()
         self.config_source = config_source
         self.matches = []
         self.function = function
     
-    @ActivityAuth('None')
     def call(self, message, done=None, *args, **kwargs):
         if command in self.matches:
             # TODO: add in authentication here
