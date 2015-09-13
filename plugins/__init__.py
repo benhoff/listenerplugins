@@ -1,6 +1,6 @@
-import yapsy
+from simpleyapsy import IPlugin
 
-class ListenerPlugin(yapsy.IPlugin):
+class ListenerPlugin(IPlugin):
     def __init__(self, function=None, config_source=None):
         super(ListenerPlugin, self).__init__()
         self.config_source = config_source
