@@ -1,4 +1,7 @@
-from simpleyapsy import IPlugin
+try:
+    from yapsy import IPlugin
+except ImportError:
+    from simpleyapsy import IPlugin
 
 class ListenerPlugin(IPlugin):
     def __init__(self, function=None, config_source=None):
