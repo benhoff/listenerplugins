@@ -30,3 +30,5 @@ from .etymology import Etymology
 from .feeds import Feeds
 from .issafe import IsSafe
 from .wikipedia import Wikipedia
+
+plugins = [Amazon, Books, Brainfuck, ChatBot, Cryptocurrency, Cypher, Drama, Etymology, Feeds, IsSafe, Wikipedia]
