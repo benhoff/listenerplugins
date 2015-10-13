@@ -13,11 +13,6 @@ class Wikipedia(ListenerPlugin):
         str_matches = ["wiki", "wikipedia", "w"]
         self._matches = [re.compile(s) for s in str_matches]
 
-    # FIXME: this API is not permenant
-    def set_bot(self, bot):
-        self.bot = bot
-
-    
     def call(self, regex_command, string_argument, done=None):
         if regex_command in self._matches:
             result = wiki(string_argument)

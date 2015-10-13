@@ -25,11 +25,6 @@ class Cypher(ListenerPlugin):
         super(Cypher, self).__init__()
         self._cypher_matches = [re.compile('cypher'), re.compile('cipher')]
         self._decypher_matches = [re.compile('decypher'), re.compile('decipher')]
-
-    # FIXME: this API is not permenant
-    def set_bot(self, bot):
-        self.bot = bot
-
     
     def call(self, regex_command, string_argument, done=None):
         if regex_command in self._cypher_matches or regex_command in self._decypher_matches:

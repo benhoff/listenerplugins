@@ -20,10 +20,6 @@ class Amazon(ListenerPlugin):
         super(Amazon, self).__init__()
         self._matches = [re.compile('az'), re.compile('amazon')]
 
-    # FIXME: this API is not permenant
-    def set_bot(self, bot):
-        self.bot = bot
-
     def call(self, regex_command, string_argument, done=None):
         if regex_command in self._matches:
             result = amazon(string_argument)

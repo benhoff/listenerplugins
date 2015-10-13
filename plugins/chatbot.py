@@ -36,11 +36,6 @@ class ChatBot(ListenerPlugin):
         SESSION['islearning'] = '1'
         SESSION['cleanslate'] = 'false'
 
-    # FIXME: this API is not permenant
-    def set_bot(self, bot):
-        self.bot = bot
-
-    
     def call(self, regex_command, string_argument, done=None):
         if regex_command in self._matches:
             result = ask(string_argument)

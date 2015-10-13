@@ -23,14 +23,6 @@ class IsSafe(ListenerPlugin):
         self._matches = ['issafe',]
         self.dev_key = None
 
-    # FIXME: this API is not permenant
-    def set_bot(self, bot):
-        self.bot = bot
-        try:
-            self.dev_key = self.bot.config.get("api_keys", {}).get("google_dev_key", None)
-        except Exception as e:
-            print(e)
-
     def call(self, regex_command, string_argument, done=None):
         if regex_command in self._matches:
             result = issafe(string_argument, self.dev_key)

@@ -8,10 +8,6 @@ class Feeds(ListenerPlugin):
         super(Feeds, self).__init__()
         self._matches = [re.compile('feed'), re.compile('rss'), re.compile('news')]
 
-    # FIXME: this API is not permenant
-    def set_bot(self, bot):
-        self.bot = bot
-
     def call(self, regex_command, string_argument, done=None):
         if regex_command in self._matches:
             result = rss(string_argument)

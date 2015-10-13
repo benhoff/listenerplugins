@@ -14,10 +14,6 @@ class Drama(ListenerPlugin):
         super(Drama, self).__init__()
         self._matches = [re.compile('drama'),]
 
-    # FIXME: this API is not permenant
-    def set_bot(self, bot):
-        self.bot = bot
-
     def call(self, regex_command, string_argument, done=None):
         if regex_command in self._matches:
             result = drama(string_argument)

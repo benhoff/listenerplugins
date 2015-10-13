@@ -39,10 +39,6 @@ class Cryptocurrency(ListenerPlugin):
         self._matches.extend(self._litecoin_matches)
         self._matches.extend(self._doge_matches)
 
-    # FIXME: this API is not permenant
-    def set_bot(self, bot):
-        self.bot = bot
-
     def call(self, regex_command, string_argument, done=None):
         print(regex_command)
         if regex_command in self._matches:
