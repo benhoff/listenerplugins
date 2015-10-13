@@ -1,6 +1,0 @@
-[Core]
-Name = Wikipedia
-Module = wikipedia
-
-[Documentation]
-Description = This is a helper for wikipedia

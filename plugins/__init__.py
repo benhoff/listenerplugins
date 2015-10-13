@@ -1,7 +1,4 @@
-try:
-    from yapsy import IPlugin
-except ImportError:
-    from simpleyapsy import IPlugin
+from simpleyapsy import IPlugin
 
 class ListenerPlugin(IPlugin):
     def __init__(self, function=None, config_source=None):
@@ -31,4 +28,4 @@ from .feeds import Feeds
 from .issafe import IsSafe
 from .wikipedia import Wikipedia
 
-plugins = [Amazon, Books, Brainfuck, ChatBot, Cryptocurrency, Cypher, Drama, Etymology, Feeds, IsSafe, Wikipedia]
+PLUGINS = [Amazon, Books, Brainfuck, ChatBot, Cryptocurrency, Cypher, Drama, Etymology, Feeds, IsSafe, Wikipedia]

@@ -1,6 +1,0 @@
-[Core]
-Name = IsSafe 
-Module = issafe 
-
-[Documentation]
-Description = This determines the if a url is safe to browse

@@ -1,6 +1,0 @@
-[Core]
-Name = Amazon
-Module = amazon 
-
-[Documentation]
-Description = This is a helper for searching amazon
