@@ -1,4 +1,4 @@
-from simpleyapsy import IPlugin
+from pluginmanager import IPlugin
 
 class ListenerPlugin(IPlugin):
     def __init__(self, function=None, config_source=None):
@@ -28,4 +28,4 @@ from .feeds import Feeds
 from .issafe import IsSafe
 from .wikipedia import Wikipedia
 
-PLUGINS = [Amazon, Books, Brainfuck, ChatBot, Cryptocurrency, Cypher, Drama, Etymology, Feeds, IsSafe, Wikipedia]
+__all__ = ['Amazon', 'Books', 'Brainfuck', 'ChatBot', 'Cryptocurrency', 'Cypher', 'Drama', 'Etymology', 'Feeds', 'IsSafe', 'Wikipedia']
