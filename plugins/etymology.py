@@ -4,16 +4,12 @@ import re
 from lxml import html
 
 import requests
-from yapsy.IPlugin import IPlugin
+from . import ListenerPlugin
 
-class EtymologyListener(IPlugin):
+class Etymology(ListenerPlugin):
     def __init__(self):
-        super(EtymologyListener, self).__init__()
+        super(Etymology, self).__init__()
         self._matches = [re.compile('e'), re.compile('etymology')]
-
-    # FIXME: this API is not permenant
-    def set_bot(self, bot):
-        self.bot = bot
 
     def call(self, regex_command, string_argument, done=None):
         if regex_command in self._matches:

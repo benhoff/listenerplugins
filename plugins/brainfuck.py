@@ -5,19 +5,15 @@ import re
 import types
 import asyncio
 import random
-from yapsy.IPlugin import IPlugin
+from . import ListenerPlugin
 
 BUFFER_SIZE = 5000
 MAX_STEPS = 1000000
 
-class BrainfuckListener(IPlugin):
+class Brainfuck(ListenerPlugin):
     def __init__(self):
-        super(BrainfuckListener, self).__init__()
+        super(Brainfuck, self).__init__()
         self._matches = [re.compile('brainfuck'), re.compile('bf')]
-
-    # FIXME: this API is not permenant
-    def set_bot(self, bot):
-        self.bot = bot
 
     def call(self, regex_command, string_argument, done=None):
         if regex_command in self._matches:

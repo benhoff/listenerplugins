@@ -15,14 +15,15 @@ import hashlib
 import collections
 import html
 import re
-from yapsy.IPlugin import IPlugin
 import requests
+
+from . import ListenerPlugin
 
 SESSION = collections.OrderedDict()
 
-class ChatBotListener(IPlugin):
+class ChatBot(ListenerPlugin):
     def __init__(self):
-        super(ChatBotListener, self).__init__()
+        super(ChatBot, self).__init__()
         self.bot = None
         str_matches = ["ask", "cleverbot", "cb"]
         self._matches = [re.compile(s) for s in str_matches]
@@ -35,11 +36,6 @@ class ChatBotListener(IPlugin):
         SESSION['islearning'] = '1'
         SESSION['cleanslate'] = 'false'
 
-    # FIXME: this API is not permenant
-    def set_bot(self, bot):
-        self.bot = bot
-
-    
     def call(self, regex_command, string_argument, done=None):
         if regex_command in self._matches:
             result = ask(string_argument)

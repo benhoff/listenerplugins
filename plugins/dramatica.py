@@ -4,19 +4,15 @@ from urllib import parse
 from lxml import html
 
 import requests
-from yapsy.IPlugin import IPlugin
+from . import ListenerPlugin
 
 api_url = "http://encyclopediadramatica.se/api.php"
 ed_url = "http://encyclopediadramatica.se/"
 
-class DramaListener(IPlugin):
+class Drama(ListenerPlugin):
     def __init__(self):
-        super(DramaListener, self).__init__()
+        super(Drama, self).__init__()
         self._matches = [re.compile('drama'),]
-
-    # FIXME: this API is not permenant
-    def set_bot(self, bot):
-        self.bot = bot
 
     def call(self, regex_command, string_argument, done=None):
         if regex_command in self._matches:
@@ -26,7 +22,6 @@ class DramaListener(IPlugin):
             done = True
             return result, done
 
-@hook.command()
 def drama(text):
     """<phrase> - gets the first paragraph of the Encyclopedia Dramatica article on <phrase>"""
 

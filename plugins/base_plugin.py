@@ -1,7 +1,7 @@
 import re
 import types
-from yapsy.IPlugin import IPlugin
 
+# TODO: Move this to `auth.py`
 def return_error(instance, message, done, *args, **kwargs):
     if isinstance(done, types.FunctionType):
         done()
@@ -30,20 +30,3 @@ class ActivityAuth(object):
     def get_user_activities(kls, user):
         role = kls.USER_ROLE_MAPPING[user] 
         return kls.ACTIVITY_ROLE[role]
-
-class Base(IPlugin):
-    def __init__(self, function=None, config_source=None):
-        super(Base, self).__init__()
-        self.config_source = config_source
-        self.matches = []
-        self.function = function
-    
-    @ActivityAuth('None')
-    def call(self, message, done=None, *args, **kwargs):
-        if command in self.matches:
-            # TODO: add in authentication here
-            result = function(argument, *args, **kwargs)
-            if isinstance(done, types.FunctionType):
-                done()
-            done = True
-            return result, done

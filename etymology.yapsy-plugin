@@ -1,6 +1,0 @@
-[Core]
-Name = Etymology
-Module = etymology
-
-[Documentation]
-Description = This determines the etymology for a word

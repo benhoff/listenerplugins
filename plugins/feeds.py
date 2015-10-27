@@ -1,15 +1,12 @@
 import feedparser
 import re
 import types
-from yapsy.IPlugin import IPlugin
-class FeedListener(IPlugin):
-    def __init__(self):
-        super(FeedListener, self).__init__()
-        self._matches = [re.compile('feed'), re.compile('rss'), re.compile('news')]
+from . import ListenerPlugin
 
-    # FIXME: this API is not permenant
-    def set_bot(self, bot):
-        self.bot = bot
+class Feeds(ListenerPlugin):
+    def __init__(self):
+        super(Feeds, self).__init__()
+        self._matches = [re.compile('feed'), re.compile('rss'), re.compile('news')]
 
     def call(self, regex_command, string_argument, done=None):
         if regex_command in self._matches:

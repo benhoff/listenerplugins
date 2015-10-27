@@ -1,6 +1,0 @@
-[Core]
-Name = Cryptocurrency
-Module = cryptocurrency
-
-[Documentation]
-Description = This is a helper for determining the price of cryptocurrencies
