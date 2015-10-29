@@ -14,14 +14,31 @@ import asyncio
 import random
 import re
 
-from cloudbot import hook
-
+from . import ListenerPlugin
 
 whitespace_re = re.compile(r'\s+')
 valid_diceroll = re.compile(r'^([+-]?(?:\d+|\d*d(?:\d+|F))(?:[+-](?:\d+|\d*d(?:\d+|F)))*)( .+)?$', re.I)
 sign_re = re.compile(r'[+-]?(?:\d*d)?(?:\d+|F)', re.I)
 split_re = re.compile(r'([\d+-]*)d?(F|\d*)', re.I)
 
+
+class Gaming(ListenerPlugin):
+    def __init__(self):
+        self._dice_matches = [re.compile('roll'), re.compile('dice')]
+        self._choose_matches = [re.compile('choose')]
+        self._coin_matches = [re.compile('coin')]
+        self.matches = []
+        self.matches.extend(self._dice_matches)
+        self.matches.extend(self._choose_matches)
+        self.matches.extend(self._coin_matches)
+
+    def __call__(self, regex_command, string_argument):
+        if regex_command in self._dice_matches:
+            return dice(string_argument)
+        elif regex_command in self._choose_matches:
+            return choose(string_argument)
+        elif regiex_command in self._coin_matches:
+            return coin(string_argument)
 
 def n_rolls(count, n):
     """roll an n-sided die count times
@@ -44,8 +61,6 @@ def n_rolls(count, n):
                                                (.5 * (1 + n)) ** 2) * count) ** .5))]
 
 
-@asyncio.coroutine
-@hook.command("roll", "dice")
 def dice(text, notice):
     """<dice roll> - simulates dice rolls. Example: 'dice 2d20-d5+4 roll 2': D20s, subtract 1D5, add 4
     :type text: str
@@ -108,8 +123,6 @@ def dice(text, notice):
         return "{} ({})".format(total, ", ".join(rolls))
 
 
-@asyncio.coroutine
-@hook.command
 def choose(text, notice):
     """<choice1>, [choice2], [choice3], etc. - randomly picks one of the given choices
     :type text: str
@@ -121,8 +134,6 @@ def choose(text, notice):
     return random.choice(choices)
 
 
-@asyncio.coroutine
-@hook.command(autohelp=False)
 def coin(text, notice, action):
     """[amount] - flips [amount] coins
     :type text: str
