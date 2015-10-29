@@ -5,16 +5,12 @@ from . import ListenerPlugin
 
 class Feeds(ListenerPlugin):
     def __init__(self):
-        super(Feeds, self).__init__()
-        self._matches = [re.compile('feed'), re.compile('rss'), re.compile('news')]
+        super().__init__()
+        self.matches = [re.compile('feed'), re.compile('rss'), re.compile('news')]
 
-    def call(self, regex_command, string_argument, done=None):
-        if regex_command in self._matches:
-            result = rss(string_argument)
-            if isinstance(done, types.FunctionType):
-                done()
-            done = True
-            return result, done
+    def __call__(self, regex_command, string_argument):
+        result = rss(string_argument)
+        return result
 
 def format_item(item):
     url = item.link

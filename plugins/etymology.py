@@ -6,18 +6,16 @@ from lxml import html
 import requests
 from . import ListenerPlugin
 
+
 class Etymology(ListenerPlugin):
     def __init__(self):
-        super(Etymology, self).__init__()
-        self._matches = [re.compile('e'), re.compile('etymology')]
+        super().__init__()
+        self.matches = [re.compile('e'), re.compile('etymology')]
 
-    def call(self, regex_command, string_argument, done=None):
-        if regex_command in self._matches:
-            result = etymology(string_argument)
-            if isinstance(done, types.FunctionType):
-                done()
-            done = True
-            return result, done
+    def __call__(self, regex_command, string_argument):
+        result = etymology(string_argument)
+        return result
+
 
 def etymology(text):
     """<word> - retrieves the etymology of <word>

@@ -23,10 +23,21 @@ from .brainfuck import Brainfuck
 from .chatbot import ChatBot
 from .cryptocurrency import Cryptocurrency
 from .cypher import Cypher
-from .dramatica import Drama
+from .dramatica import Dramatica
 from .etymology import Etymology
 from .feeds import Feeds
 from .issafe import IsSafe
 from .wikipedia import Wikipedia
 
-__all__ = ['Amazon', 'Bing', 'Books', 'Brainfuck', 'ChatBot', 'Cryptocurrency', 'Cypher', 'Drama', 'Etymology', 'Feeds', 'IsSafe', 'Wikipedia']
+__all__ = ['Amazon',
+           'Bing',
+           'Books',
+           'Brainfuck',
+           'ChatBot',
+           'Cryptocurrency',
+           'Cypher',
+           'Dramatica',
+           'Etymology',
+           'Feeds',
+           'IsSafe',
+           'Wikipedia']

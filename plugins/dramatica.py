@@ -9,18 +9,16 @@ from . import ListenerPlugin
 api_url = "http://encyclopediadramatica.se/api.php"
 ed_url = "http://encyclopediadramatica.se/"
 
-class Drama(ListenerPlugin):
-    def __init__(self):
-        super(Drama, self).__init__()
-        self._matches = [re.compile('drama'),]
 
-    def call(self, regex_command, string_argument, done=None):
-        if regex_command in self._matches:
-            result = drama(string_argument)
-            if isinstance(done, types.FunctionType):
-                done()
-            done = True
-            return result, done
+class Dramatica(ListenerPlugin):
+    def __init__(self):
+        super().__init__()
+        self.matches = [re.compile('drama'),]
+
+    def __call__(self, regex_command, string_argument):
+        result = drama(string_argument)
+        return result
+
 
 def drama(text):
     """<phrase> - gets the first paragraph of the Encyclopedia Dramatica article on <phrase>"""

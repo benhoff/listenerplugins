@@ -17,19 +17,15 @@ from . import ListenerPlugin
 
 API_SB = "https://sb-ssl.google.com/safebrowsing/api/lookup"
 
+
 class IsSafe(ListenerPlugin):
     def __init__(self):
-        super(IsSafe, self).__init__()
-        self._matches = ['issafe',]
-        self.dev_key = None
+        super().__init__()
+        self.matches = [re.compile('issafe'),]
 
-    def call(self, regex_command, string_argument, done=None):
-        if regex_command in self._matches:
-            result = issafe(string_argument, self.dev_key)
-            if isinstance(done, types.FunctionType):
-                done()
-            done = True
-            return result, done
+    def call(self, regex_command, string_argument):
+        result = issafe(string_argument, self.dev_key)
+        return resul
 
 def issafe(text, dev_key=None):
     """<website> -- Checks the website against Google's Safe Browsing List."""

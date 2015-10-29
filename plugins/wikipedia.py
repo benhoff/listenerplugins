@@ -8,18 +8,13 @@ from . import ListenerPlugin
 
 class Wikipedia(ListenerPlugin):
     def __init__(self):
-        super(Wikipedia, self).__init__()
-        self.bot = None
+        super().__init__()
         str_matches = ["wiki", "wikipedia", "w"]
-        self._matches = [re.compile(s) for s in str_matches]
+        self.matches = [re.compile(s) for s in str_matches]
 
-    def call(self, regex_command, string_argument, done=None):
-        if regex_command in self._matches:
-            result = wiki(string_argument)
-            if isinstance(done, types.FunctionType):
-                done()
-            done = True
-            return result, done
+    def call(self, regex_command, string_argument):
+        result = wiki(string_argument)
+        return result
 
 # security
 parser = etree.XMLParser(resolve_entities=False, no_network=True)
