@@ -1,20 +1,12 @@
 from pluginmanager import IPlugin
 
 class ListenerPlugin(IPlugin):
-    def __init__(self, function=None, config_source=None):
-        super(ListenerPlugin, self).__init__()
-        self.config_source = config_source
+    def __init__(self):
+        super().__init__()
         self.matches = []
-        self.function = function
     
-    def call(self, message, done=None, *args, **kwargs):
-        if command in self.matches:
-            # TODO: add in authentication here
-            result = function(argument, *args, **kwargs)
-            if isinstance(done, types.FunctionType):
-                done()
-            done = True
-            return result, done
+    def __call__(self, regex_command, message, *args, **kwargs):
+        pass
 
 from .amazon import Amazon
 from .bing import Bing
