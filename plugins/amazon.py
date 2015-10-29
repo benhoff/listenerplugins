@@ -17,10 +17,10 @@ AFFILIATE_TAG = None
 
 class Amazon(ListenerPlugin):
     def __init__(self):
-        super(Amazon, self).__init__()
+        super().__init__()
         self.matches = [re.compile('az'), re.compile('amazon')]
 
-    def call(self, regex_command, string_argument):
+    def __call__(self, regex_command, string_argument):
         result = amazon(string_argument)
         return result
 

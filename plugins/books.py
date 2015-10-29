@@ -7,18 +7,17 @@ base_url = 'https://www.googleapis.com/books/v1/'
 book_search_api = base_url + 'volumes?'
 
 class Books(ListenerPlugin):
-    def __init__(self):
-        super(Books, self).__init__()
-        self._matches = [re.compile('books'), re.compile('gbooks')]
-        self.dev_key = None
+    CONFIG_TEMPLATE = {'Google API Key': None}
 
-    def call(self, regex_command, string_argument, done=None):
-        if regex_command in self._matches:
-            result = books(string_argument, self.dev_key)
-            if isinstance(done, types.FunctionType):
-                done()
-            done = True
-            return result, done
+    def __init__(self):
+        super().__init__()
+        self.matches = [re.compile('books'), re.compile('gbooks')]
+        self._api_key = 'Google API Key'
+        self.config = self.CONFIG_TEMPLATE
+
+    def __call__(self, regex_command, string_argument):
+        result = books(string_argument, self.config[self._api_key]
+        return result
 
 def books(text, dev_key=None):
     """books <query> -- Searches Google Books for <query>."""
