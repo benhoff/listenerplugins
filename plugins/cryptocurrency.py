@@ -31,9 +31,9 @@ class Cryptocurrency(ListenerPlugin):
 
         self.matches = [re.compile('crypto'), re.compile('cryptocurrency')]
 
-        self._matches.extend(self._bitcoin_matches)
-        self._matches.extend(self._litecoin_matches)
-        self._matches.extend(self._doge_matches)
+        self.matches.extend(self._bitcoin_matches)
+        self.matches.extend(self._litecoin_matches)
+        self.matches.extend(self._doge_matches)
 
     def __call__(self, regex_command, string_argument):
         if regex_command in self._bitcoin_matches:

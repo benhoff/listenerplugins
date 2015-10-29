@@ -16,7 +16,7 @@ class Books(ListenerPlugin):
         self.config = self.CONFIG_TEMPLATE
 
     def __call__(self, regex_command, string_argument):
-        result = books(string_argument, self.config[self._api_key]
+        result = books(string_argument, self.config[self._api_key])
         return result
 
 def books(text, dev_key=None):
