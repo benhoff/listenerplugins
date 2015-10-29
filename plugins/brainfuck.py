@@ -12,16 +12,12 @@ MAX_STEPS = 1000000
 
 class Brainfuck(ListenerPlugin):
     def __init__(self):
-        super(Brainfuck, self).__init__()
-        self._matches = [re.compile('brainfuck'), re.compile('bf')]
+        super().__init__()
+        self.matches = [re.compile('brainfuck'), re.compile('bf')]
 
-    def call(self, regex_command, string_argument, done=None):
-        if regex_command in self._matches:
-            result = bf(string_argument)
-            if isinstance(done, types.FunctionType):
-                done()
-            done = True
-            return result, done
+    def __call__(self, regex_command, string_argument):
+        result = bf(string_argument)
+        return result
 
 def bf(text):
     """<prog> - executes <prog> as Brainfuck code

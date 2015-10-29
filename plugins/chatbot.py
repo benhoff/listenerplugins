@@ -23,10 +23,10 @@ SESSION = collections.OrderedDict()
 
 class ChatBot(ListenerPlugin):
     def __init__(self):
-        super(ChatBot, self).__init__()
+        super().__init__()
         self.bot = None
         str_matches = ["ask", "cleverbot", "cb"]
-        self._matches = [re.compile(s) for s in str_matches]
+        self.matches = [re.compile(s) for s in str_matches]
         SESSION['stimulus'] = ""
         SESSION['sessionid'] = ""
         SESSION['start'] = 'y'
@@ -36,13 +36,9 @@ class ChatBot(ListenerPlugin):
         SESSION['islearning'] = '1'
         SESSION['cleanslate'] = 'false'
 
-    def call(self, regex_command, string_argument, done=None):
-        if regex_command in self._matches:
-            result = ask(string_argument)
-            if isinstance(done, types.FunctionType):
-                done()
-            done = True
-            return result, done
+    def __call__(self, regex_command, string_argument):
+        result = ask(string_argument)
+        return result
 
 
 API_URL = "http://www.cleverbot.com/webservicemin/"

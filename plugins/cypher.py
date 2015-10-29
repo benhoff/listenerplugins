@@ -22,21 +22,20 @@ from . import ListenerPlugin
 
 class Cypher(ListenerPlugin):
     def __init__(self):
-        super(Cypher, self).__init__()
+        super().__init__()
         self._cypher_matches = [re.compile('cypher'), re.compile('cipher')]
         self._decypher_matches = [re.compile('decypher'), re.compile('decipher')]
-    
-    def call(self, regex_command, string_argument, done=None):
-        if regex_command in self._cypher_matches or regex_command in self._decypher_matches:
-            if regex_command in self._cypher_matches:
-                result = cypher(string_argument)
-            elif regex_command in self._decypher_matches:
-                result = decypher(string_argument)
-            if isinstance(done, types.FunctionType):
-                done()
-            done = True
 
-            return result, done
+        self.matches = []
+        self.matches.extend(self._cypher_matches)
+        self.matches.extend(self._decypher_matches)
+    
+    def __call__(self, regex_command, string_argument):
+        if regex_command in self._cypher_matches:
+            result = cypher(string_argument)
+        elif regex_command in self._decypher_matches:
+            result = decypher(string_argument)
+        return result
 
 def encode(password, text):
     """

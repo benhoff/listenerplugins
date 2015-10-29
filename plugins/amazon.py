@@ -17,16 +17,12 @@ AFFILIATE_TAG = None
 
 class Amazon(ListenerPlugin):
     def __init__(self):
-        super(Amazon, self).__init__()
-        self._matches = [re.compile('az'), re.compile('amazon')]
+        super().__init__()
+        self.matches = [re.compile('az'), re.compile('amazon')]
 
-    def call(self, regex_command, string_argument, done=None):
-        if regex_command in self._matches:
-            result = amazon(string_argument)
-            if isinstance(done, types.FunctionType):
-                done()
-            done = True
-            return result, done
+    def __call__(self, regex_command, string_argument):
+        result = amazon(string_argument)
+        return result
 
 #TODO: Implement
 def amazon_url(match):

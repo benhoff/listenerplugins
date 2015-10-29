@@ -24,37 +24,28 @@ API_URL = "https://coinmarketcap-nexuist.rhcloud.com/api/{}"
 
 class Cryptocurrency(ListenerPlugin):
     def __init__(self):
-        super(Cryptocurrency, self).__init__()
-        str_matches = ['bitcoin', 'btc', 'litecoin', 'ltc', 
-                'dogecoin', 'doge', 'crypto', 'cryptocurrency']
-
-        self._matchs = [re.compile(s) for s in str_matches]
+        super().__init__()
         self._bitcoin_matches = [re.compile('bitcoin'), re.compile('btc')]
         self._litecoin_matches = [re.compile('litecoin'), re.compile('ltc')]
         self._doge_matches = [re.compile('dogecoin'), re.compile('doge')]
 
-        self._matches = [re.compile('crypto'), re.compile('cryptocurrency')]
+        self.matches = [re.compile('crypto'), re.compile('cryptocurrency')]
 
         self._matches.extend(self._bitcoin_matches)
         self._matches.extend(self._litecoin_matches)
         self._matches.extend(self._doge_matches)
 
-    def call(self, regex_command, string_argument, done=None):
-        print(regex_command)
-        if regex_command in self._matches:
-            if regex_command in self._bitcoin_matches:
-                result = crypto_command('btc')
-            elif regex_command in self._doge_matches:
-                result = crypto_command("doge")
-            elif regex_command in self._litecoin_matches:
-                result = crypto_command("ltc")
-            else:
-                result = crypto_command(string_argument)
+    def __call__(self, regex_command, string_argument):
+        if regex_command in self._bitcoin_matches:
+            result = crypto_command('btc')
+        elif regex_command in self._doge_matches:
+            result = crypto_command("doge")
+        elif regex_command in self._litecoin_matches:
+            result = crypto_command("ltc")
+        else:
+            result = crypto_command(string_argument)
 
-            if isinstace(done, types.FunctionType):
-                done()
-            done = True
-            return result, done
+        return result
 
 
 # main command
