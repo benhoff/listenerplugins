@@ -1,11 +1,10 @@
+import re
 import random
 
 import requests
 from lxml import html
 
-from cloudbot import hook
-from cloudbot.util import formatting, filesize, colors
-
+from . import ListenerPlugin
 
 API_URL = "https://api.datamarket.azure.com/Bing/Search/v1/Composite"
 
@@ -16,6 +15,27 @@ API_URL = "https://api.datamarket.azure.com/Bing/Search/v1/Composite"
 # the default config just sets the filter to Moderate for all queries
 DEFAULT_FILTER = "Moderate"
 NSFW_FILTER = "Moderate"
+
+
+class Bing(ListenerPlugin):
+    CONFIG_TEMPLATE = {'Bing API key': None}
+
+    def __init__(self):
+        super().__init__()
+        self._bing_matches = [re.compile('bing'), re.compile('b')]
+        self._bing_img_matches = [re.compile('bingimage'), re.compile('bis')]
+        self.matches = []
+        self.matches.extend(self._bing_img_matches)
+        self.matches.extend(self._bing_matches)
+        self.config = self.CONFIG_TEMPLATE
+        self._api_key ='Bing API key' 
+
+    def __call__(self, regex_command, string_argument):
+        if regex_command in self._bing_matches:
+            result = bing(string_argument, self.config[self._api_key])
+        elif regex_command in self._bing_img_matches:
+            result = bingimage(string_argument, self.config[self._api_key])
+        return result
 
 
 def unescape(s):
@@ -29,11 +49,8 @@ def bingify(s):
     return "'{}'".format(s)
 
 
-@hook.command("bing", "b")
-def bing(text, bot):
+def bing(text, api_key):
     """<query> - returns the first bing search result for <query>"""
-    api_key = bot.config.get("api_keys", {}).get("bing_azure")
-
     # handle NSFW
     show_nsfw = text.endswith(" nsfw")
     # remove "nsfw" from the input string after checking for it
@@ -64,17 +81,15 @@ def bing(text, bot):
     result = j["Web"][0]
 
     # not entirely sure this even needs un-escaping, but it wont hurt to leave it in
-    title = formatting.truncate(unescape(result["Title"]), 60)
-    desc = formatting.truncate(unescape(result["Description"]), 150)
+    title = unescape(result["Title"])
+    desc = unescape(result["Description"])
     url = unescape(result["Url"])
 
-    return colors.parse('{} -- $(b){}$(b): "{}"'.format(url, title, desc))
+    return '{} -- $(b){}$(b): "{}"'.format(url, title, desc)
 
 
-@hook.command("bingimage", "bis")
-def bingimage(text, bot):
+def bingimage(text, api_key):
     """<query> - returns the first bing image search result for <query>"""
-    api_key = bot.config.get("api_keys", {}).get("bing_azure")
 
     # handle NSFW
     show_nsfw = text.endswith(" nsfw")
@@ -115,7 +130,7 @@ def bingimage(text, bot):
     # file type
     tags.append(result["ContentType"])
     # file size
-    tags.append(filesize.size(int(result["FileSize"]), system=filesize.alternative))
+    # tags.append(filesize.size(int(result["FileSize"]), system=filesize.alternative))
     # NSFW warning
     if "explicit" in result["Thumbnail"]["MediaUrl"]:
         tags.append("NSFW")

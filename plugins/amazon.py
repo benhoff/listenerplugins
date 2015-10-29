@@ -19,9 +19,13 @@ class Amazon(ListenerPlugin):
     def __init__(self):
         super().__init__()
         self.matches = [re.compile('az'), re.compile('amazon')]
+        self.matches.extend(AMAZON_RE)
 
     def __call__(self, regex_command, string_argument):
-        result = amazon(string_argument)
+        if AMAZON_RE.match(regex_command):
+            result = amazon_url
+        else:
+            result = amazon(string_argument)
         return result
 
 #TODO: Implement

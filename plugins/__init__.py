@@ -17,6 +17,7 @@ class ListenerPlugin(IPlugin):
             return result, done
 
 from .amazon import Amazon
+from .bing import Bing
 from .books import Books
 from .brainfuck import Brainfuck
 from .chatbot import ChatBot
@@ -28,4 +29,4 @@ from .feeds import Feeds
 from .issafe import IsSafe
 from .wikipedia import Wikipedia
 
-__all__ = ['Amazon', 'Books', 'Brainfuck', 'ChatBot', 'Cryptocurrency', 'Cypher', 'Drama', 'Etymology', 'Feeds', 'IsSafe', 'Wikipedia']
+__all__ = ['Amazon', 'Bing', 'Books', 'Brainfuck', 'ChatBot', 'Cryptocurrency', 'Cypher', 'Drama', 'Etymology', 'Feeds', 'IsSafe', 'Wikipedia']
