@@ -19,7 +19,7 @@ class Amazon(ListenerPlugin):
     def __init__(self):
         super().__init__()
         self.matches = [re.compile('az'), re.compile('amazon')]
-        self.matches.extend(AMAZON_RE)
+        self.matches.append(AMAZON_RE)
 
     def __call__(self, regex_command, string_argument):
         if AMAZON_RE.match(regex_command):
