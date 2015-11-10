@@ -9,7 +9,7 @@ originalDir = os.getcwd()
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 try:
 	setup(
-		name = "plugins",
+		name = "listenerplugins",
 		version = '0.0.1',
 		packages = ['plugins'],
 		package_dir = {'plugins':'plugins'},
@@ -17,9 +17,9 @@ try:
 		# metadata for upload to PyPI
 		author = "Sundry",
 		keywords = "plugins",
-		url = "http://github.com/benhoff/plugins",
+		url = "http://github.com/benhoff/listenerplugins",
 		# more details
-		classifiers=['Development Status :: 5 - Production/Stable',
+		classifiers=['Development Status :: 3 - Alpha',
 					 'Intended Audience :: Developers',
 					 'Operating System :: OS Independent',
 					 'Programming Language :: Python :: 3',
