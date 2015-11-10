@@ -2,7 +2,7 @@
 # -*- coding: utf-8; tab-width: 4; indent-tabs-mode: t -*-
 
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 # just in case setup.py is launched from elsewhere that the containing directory
 originalDir = os.getcwd()
@@ -10,9 +10,8 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 try:
 	setup(
 		name = "listenerplugins",
-		version = '0.0.1',
-		packages = ['plugins'],
-		package_dir = {'plugins':'plugins'},
+		version = '0.0.2',
+		packages = find_packages(),
 		
 		# metadata for upload to PyPI
 		author = "Sundry",
