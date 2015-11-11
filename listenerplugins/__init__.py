@@ -32,23 +32,30 @@ class ListenerPlugin(IPlugin):
             if args.get(name, None) is None:
                 args[name] = value
             else:
-                assert value is None( 'named argument {} was matched more than once'.format(name))
+                assert value is None, ('named argument {} was matched more than once'.format(name))
 
         return args
     
     def __call__(self, regex_command, message, *args, **kwargs):
         for method in self._get_event_handlers():
+            # Maybe add in a fallthrough here if event handler doesn't have 
+            # a pattern?
+
+
             # search for a match in the method regex attr named `pattern`
             match = method.pattern.search(regex_command)
                 # if we find a match...
-                if match is not None:
+                if match:
                     # get the args, and kwargs out
-                    args = match.group()
+                    args = match.groups()
                     kwargs = match.groupdict()
                     if kwargs:
+                        # asserts that their aren't mixed kwargs and args
+                        # converts args to a dict
+                        # removes any numbers at the end if their are any
                         args = self._handle_kwargs(args, kwargs)
 
-            if args is not None:
+            if args:
                 if isinstance(args, dict):
                     result = method(message, **args)
                 else:
