@@ -1,6 +1,7 @@
 import re
 from pluginmanager import IPlugin
 
+
 class ListenerPlugin(IPlugin):
     _event_handlers = None
     _perodic_handlers = None
@@ -36,14 +37,13 @@ class ListenerPlugin(IPlugin):
 
         return args
     
-    def __call__(self, regex_command, message, *args, **kwargs):
+    def __call__(self, message, user=None, auth_func=None, *args, **kwargs):
         for method in self._get_event_handlers():
             # Maybe add in a fallthrough here if event handler doesn't have 
             # a pattern?
 
-
             # search for a match in the method regex attr named `pattern`
-            match = method.pattern.search(regex_command)
+            match = method.pattern.search(message)
                 # if we find a match...
                 if match:
                     # get the args, and kwargs out
@@ -55,7 +55,10 @@ class ListenerPlugin(IPlugin):
                         # removes any numbers at the end if their are any
                         args = self._handle_kwargs(args, kwargs)
 
-            if args:
+            if (args
+                and auth_func
+                and auth_func(user, method.role):
+
                 if isinstance(args, dict):
                     result = method(message, **args)
                 else:
@@ -100,7 +103,7 @@ def _match_sub_selectors(regex):
         regex = regex + '$'
 
 
-def match(regex, simple=True):
+def match(regex, simple=True, role=None):
     if simple:
         regex = _match_sub_selectors(regex)
 
@@ -108,6 +111,7 @@ def match(regex, simple=True):
     def wrap(function):
         function.handler = True
         function.pattern = pattern
+        function.role = role
         return function
     return wrap
 
